@@ -46,13 +46,17 @@ OpenSSL for certificate generation.
 Generate Local Certificates:
 
 Bash
-openssl req -x509 -newkey rsa:4096 -keyout traefik/certs/key.pem -out traefik/certs/cert.pem -sha256 -days 365 -nodes
+``openssl req -x509 -newkey rsa:4096 -keyout traefik/certs/key.pem -out traefik/certs/cert.pem -sha256 -days 365 -nodes``
+
 3. Deployment
+
 Run the following command to launch the stack in detached mode:
 
 Bash
-docker-compose up -d
+``docker-compose up -d``
+
 4. Verification
+
 Traefik Dashboard: Accessible at http://localhost:8080/dashboard/.
 
-Secure Site: Accessible at https://localhost.
+Secure Site: Accessible at ``https://localhost.``
