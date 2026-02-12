@@ -1,0 +1,19 @@
+http:
+  routers:
+    nginx:
+      rule: "Host(`localhost`)"
+      service: nginx-service
+      entryPoints:
+        - websecure
+      tls: {}
+
+  services: # Moved INSIDE the http block
+    nginx-service:
+      loadBalancer:
+        servers:
+          - url: "http://nginx:80" # 'nginx' matches your container name
+
+tls:
+  certificates:
+    - certFile: /certs/cert.pem
+      keyFile: /certs/key.pem

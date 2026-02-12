@@ -1,0 +1,30 @@
+services:
+  traefik:
+    image: traefik:v3.6.8
+    container_name: traefik
+    command:
+      - "--configfile=/traefik.yml"
+    ports:
+      - "80:80"
+      - "8080:8080"
+      - "443:443"
+    volumes:
+      - ./traefik/traefik.yml:/traefik.yml:ro
+      - ./traefik/routes.yml:/traefik/routes.yml:ro
+      - ./traefik/certs:/certs:ro
+    networks:
+      - web
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    volumes:
+      - ./website:/usr/share/nginx/html
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - web
+
+networks:
+  web:
+    driver: bridge
