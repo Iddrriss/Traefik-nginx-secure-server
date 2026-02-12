@@ -14,19 +14,34 @@ Technical Walkthrough
 Docker & Docker Compose installed.
 
 OpenSSL for certificate generation.
-.
-├── docker-compose.yml          # Docker services orchestration
-├── README.md                   # This file
+## File system
+## Directory Tree
+
+├── docker-compose.yml             # Docker services orchestration
+
+├── .gitignore                      # Git ignore rules (Security)
+
+├── README.md                        # Project documentation
+
 ├── traefik/
-│   ├── traefik.yml            # Traefik main configuration (entry points, TLS, providers)
-│   ├── routes.yml             # Explicit routing rules (HTTP routers & services)
+
+│   ├── traefik.yml                  # Traefik main configuration
+
+│   ├── routes.yml                   # Explicit routing rules
+
 │   └── certs/
-│       ├── cert.pem           # Self-signed certificate
-│       └── key.pem            # Private key (4096-bit RSA)
+
+│       ├── cert.pem                 # SSL certificate (Ignored)
+
+│       └── key.pem                  # Private key (Ignored)
+
 ├── nginx/
-│   └── default.conf           # NGINX server configuration
+
+│   └── default.conf                    # NGINX server configuration
+
 └── website/
-    └── index.html             # Static website content
+
+    └── index.html              # Static website content
 
 Generate Local Certificates:
 
