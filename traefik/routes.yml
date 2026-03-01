@@ -1,19 +1,27 @@
 http:
-  routers:
-    nginx:
-      rule: "Host(`localhost`)"
-      service: nginx-service
-      entryPoints:
-        - websecure
-      tls: {}
+ 
+  middlewares:
+    rate-limit:
+      rateLimit:
+        average: 100
+        burst: 50
+    secure-headers:
+      headers:
+        stsSeconds: 31536000
+        frameDeny: true
+        contentTypeNosniff: true
+        referrerPolicy: "strict-origin-when-cross-origin"
+        browserXssFilter: true
+        contentSecurityPolicy: "default-src 'self'"
 
-  services: # Moved INSIDE the http block
+
+  services:
     nginx-service:
       loadBalancer:
         servers:
-          - url: "http://nginx:80" # 'nginx' matches your container name
+          - url: "http://nginx:80"
 
 tls:
   certificates:
-    - certFile: /certs/cert.pem
-      keyFile: /certs/key.pem
+    - certFile: /certs/cert.pem  
+      keyFile: /certs/key.pem   

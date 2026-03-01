@@ -1,4 +1,4 @@
-services:
+﻿services:
   traefik:
     image: traefik:v3.6.8
     container_name: traefik
@@ -6,12 +6,13 @@ services:
       - "--configfile=/traefik.yml"
     ports:
       - "80:80"
-      - "8080:8080"
       - "443:443"
+      - "8080:8080"
     volumes:
       - ./traefik/traefik.yml:/traefik.yml:ro
       - ./traefik/routes.yml:/traefik/routes.yml:ro
       - ./traefik/certs:/certs:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
       - web
     restart: unless-stopped
@@ -20,8 +21,29 @@ services:
     image: nginx:alpine
     container_name: nginx
     volumes:
-      - ./website:/usr/share/nginx/html
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./website:/usr/share/nginx/html:ro
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nginx.rule=Host(`cysgroup10.local`)"
+      - "traefik.http.routers.nginx.entrypoints=websecure"
+      - "traefik.http.routers.nginx.tls=true"
+      - "traefik.http.routers.nginx.middlewares=rate-limit@file,secure-headers@file"
+    networks:
+      - web
+
+  nginx2:
+    image: nginx:alpine
+    container_name: nginx2
+    volumes:
+      - ./website2:/usr/share/nginx/html:ro
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nginx2.rule=Host(`site2.cysgroup10.local`)"
+      - "traefik.http.routers.nginx2.entrypoints=websecure"
+      - "traefik.http.routers.nginx2.tls=true"
+      - "traefik.http.routers.nginx2.middlewares=rate-limit@file,secure-headers@file"
     networks:
       - web
 
