@@ -1,0 +1,5 @@
+# Ignore SSL keys
+traefik/certs/*.pem
+
+# Ignore Docker data
+.docker/
